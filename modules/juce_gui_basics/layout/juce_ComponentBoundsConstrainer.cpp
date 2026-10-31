@@ -16,7 +16,7 @@
    framework to you, and you must discontinue the installation or download
    process and cease use of the JUCE framework.
 
-   JUCE End User Licence Agreement: https://juce.com/legal/juce-8-licence/
+   JUCE End User Licence Agreement: https://juce.com/legal/juce-9-licence/
    JUCE Privacy Policy: https://juce.com/juce-privacy-policy
    JUCE Website Terms of Service: https://juce.com/juce-website-terms-of-service/
 
@@ -183,15 +183,14 @@ void ComponentBoundsConstrainer::checkBounds (Rectangle<int>& bounds,
                                               bool isStretchingBottom,
                                               bool isStretchingRight)
 {
+    bounds.setWidth (jlimit (minW, maxW, bounds.getWidth()));
+    bounds.setHeight (jlimit (minH, maxH, bounds.getHeight()));
+
     if (isStretchingLeft)
-        bounds.setLeft (jlimit (old.getRight() - maxW, old.getRight() - minW, bounds.getX()));
-    else
-        bounds.setWidth (jlimit (minW, maxW, bounds.getWidth()));
+        bounds = bounds.withRightX (old.getRight());
 
     if (isStretchingTop)
-        bounds.setTop (jlimit (old.getBottom() - maxH, old.getBottom() - minH, bounds.getY()));
-    else
-        bounds.setHeight (jlimit (minH, maxH, bounds.getHeight()));
+        bounds = bounds.withBottomY (old.getBottom());
 
     if (bounds.isEmpty())
         return;

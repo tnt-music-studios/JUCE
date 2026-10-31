@@ -16,7 +16,7 @@
    framework to you, and you must discontinue the installation or download
    process and cease use of the JUCE framework.
 
-   JUCE End User Licence Agreement: https://juce.com/legal/juce-8-licence/
+   JUCE End User Licence Agreement: https://juce.com/legal/juce-9-licence/
    JUCE Privacy Policy: https://juce.com/juce-privacy-policy
    JUCE Website Terms of Service: https://juce.com/juce-website-terms-of-service/
 
@@ -104,8 +104,8 @@ struct ComponentHelpers
     template <typename PointOrRect>
     static PointOrRect convertFromParentSpace (const Component& comp, const PointOrRect pointInParentSpace)
     {
-        const auto transformed = comp.affineTransform != nullptr ? pointInParentSpace.transformedBy (comp.affineTransform->inverted())
-                                                                 : pointInParentSpace;
+        const auto transformed = comp.isTransformed() ? pointInParentSpace.transformedBy (comp.getTransform().inverted())
+                                                      : pointInParentSpace;
 
         if (comp.isOnDesktop())
         {
@@ -142,8 +142,8 @@ struct ComponentHelpers
             return SH::addPosition (pointInLocalSpace, comp);
         });
 
-        return comp.affineTransform != nullptr ? preTransform.transformedBy (*comp.affineTransform)
-                                               : preTransform;
+        return comp.isTransformed() ? preTransform.transformedBy (comp.getTransform())
+                                    : preTransform;
     }
 
     template <typename PointOrRect>
@@ -205,7 +205,7 @@ struct ComponentHelpers
     {
         c.invalidateCachedImageResources();
 
-        for (auto* child : c.childComponentList)
+        for (auto* child : c.getChildren())
             releaseAllCachedImageResources (*child);
     }
 
