@@ -3947,9 +3947,6 @@ private:
                 // We still want to raise the window if the caption is clicked. This is normally
                 // handled by DefWindowProc but we're bypassing that.
                 SetWindowPos (hwnd, HWND_TOP, 0, 0, 0, 0, SWP_NOMOVE | SWP_NOSIZE);
-                // Bypassing DefWindowProc also skips the focus it would give an already-active
-                // window that currently has no focus window. SetFocus on the focused window is a no-op.
-                grabFocus();
                 return 0;
         }
 
